@@ -4,7 +4,7 @@ from rest_framework import serializers, viewsets,permissions,status
 from rest_framework.views import Response,APIView
 from .serializers import bookSerializers
 from rest_framework.generics import RetrieveAPIView
-
+from django.shortcuts import get_object_or_404
 class latestBookApi(APIView):
     permissions_classes = [permissions.AllowAny]
 
@@ -39,6 +39,10 @@ class bookApi(viewsets.ModelViewSet):
         data.reverse()
         return data
 
-
+    def get_object(self):
+        pk = self.kwargs['pk']
+        obj = get_object_or_404(book, pk=pk)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
